@@ -234,7 +234,7 @@
                     //我们使用的编辑文章类别这个接口没有说明使用formData,那就不能传formData
                     //如果后端不用formData接收,前面又需要获取很多值,那就可以使用jQuery为我们提供的一个方法 serialize
                     //serialize的使用一样的 要给form表单里面获取值得标签添加name属性.
-                    var data = $('.modal-body form').serialize();
+                    var data = $('.modal-body form').serialize(); 
                     //拼接成了一个字符串: key1=value1&key2=value2
                     //                  "id=1&name=科学555&slug=kexue555"
 
