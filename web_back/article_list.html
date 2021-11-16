@@ -23,7 +23,7 @@
                 <div class="col-xs-6">
                     <form class="form-inline">
                         <select id="selCategory" name="" class="form-control input-sm">
-                            <option>所有分类</option>
+                            <option value="">所有分类</option>
                             <option>未分类</option>
                             <option>奇趣事</option>
                             <option>会生活</option>
@@ -335,8 +335,10 @@
                         }
                     }
                 })
-            })
+            });
 
+            //一进入页面相当于触发一次筛选按钮的事件
+            $('#btnSearch').trigger('click');
         })
     </script>
 
