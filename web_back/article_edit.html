@@ -15,6 +15,7 @@
     <script src="js/jedate/js/jedate.js"></script>
     <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <script src="./js/template-web.js"></script>
 </head>
 
 <body>
@@ -27,7 +28,7 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" value="文章标题文字">
+                        <input type="email" class="form-control title" id="inputEmail3" value="文章标题文字">
                     </div>
                 </div>
                 <div class="form-group">
@@ -40,7 +41,7 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control">
+                        <select class="form-control article_type">
                             <option>类别一</option>
                             <option>类别二</option>
                             <option>类别三</option>
@@ -54,11 +55,11 @@
                     <div class="col-sm-4">
 
                         <div class="input-group">
-                            <input type="text" class="form-control" value="2019-05-17" id="dateinput">
+                            <input type="text" class="form-control" disabled value="2019-05-17" id="dateinput">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button"
+                                <!-- <button class="btn btn-default" type="button"
                                     onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
-                                        class="iconfont icon-icondate"></i></button>
+                                        class="iconfont icon-icondate"></i></button> -->
                             </span>
                         </div>
                     </div>
@@ -77,7 +78,43 @@
             </form>
         </div>
     </div>
+    <script type="text/html" id="edit_cate" >
+        {{each data v}}
+            <option value="{{v.id}}">{{v.name}}</option>
+        {{/each}}
+    </script>
+<script>
+    $(function(){
+        //页面刚进来获取文章分类 渲染到文章类别
+        $.get({
+            url: 'http://localhost:8000/admin/category_search',
+            success:function(res){
+                // console.log(res);
+                let cateHtml = template('edit_cate',res);
+                $('.article_type').html(cateHtml);
+            }
+        });
 
+        //编辑页面跳转过来的时候请求文章详情并渲染
+        let editId = location.search.split('=')[1];
+        $.get({
+            url:'http://localhost:8000/admin/search',
+            data:{
+                id:editId
+            },
+            success:function(res){
+                // console.log(res)
+                $('.title').val(res.data.title);
+                $('.article_cover').attr('src',res.data.cover);
+                $('.article_type').val(res.data.type);
+                $('#dateinput').val(res.data.date);
+                $('#rich_content').val(res.data.content)
+
+            }
+        })
+    })
+
+</script>
 </body>
 
 </html>
