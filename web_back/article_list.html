@@ -289,7 +289,7 @@
             <td class="text-center">{{v.state}}</td>
             <td class="text-center">
                 <a href="article_edit.html"  class="btn btn-default btn-xs">编辑</a>
-                <a href="#"  data-id="{{v.id}}" class="btn btn-danger btn-xs">删除</a>
+                <a href="#"  data-id="{{v.id}}" class="btn btn-danger btn-xs btn-delete">删除</a>
             </td>
         </tr>
         {{/each}}
@@ -317,6 +317,7 @@
             //筛选按钮的功能完成
             $('#btnSearch').on('click', function (e) {
                 e.preventDefault();
+                $('.page-link').trigger('click');
                 getData(1);
 
             });
@@ -343,9 +344,11 @@
                         };
                         var totalPages = res.totalPage;
 
+                       window.currentPage = $pagination.twbsPagination('getCurrentPage');
+                        
                         if (myTotalpages != totalPages) {
                             myTotalpages = totalPages;
-                            var currentPage = $pagination.twbsPagination('getCurrentPage');
+                            
                             $pagination.twbsPagination('destroy');
                             $pagination.twbsPagination($.extend({}, defaultOpts, {
                                 startPage: 1,
@@ -396,6 +399,24 @@
             //         getData(page);
             //     }
             // });
+
+
+            //文章删除按钮事件
+            $('tbody').on('click','.btn-delete',function(){
+                if ( confirm('请问真的要删除吗？') ){
+                    let id = $(this).attr('data-id');
+                    $.get({
+                        url:'http://localhost:8000/admin/article_delete',
+                        data:{
+                            id:id
+                        },
+                        success:function(res){
+                            console.log(res);
+                            getData(currentPage);
+                        }
+                    })
+                }
+            })
         })
     </script>
 
